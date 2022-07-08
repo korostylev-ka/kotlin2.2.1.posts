@@ -6,6 +6,8 @@ class WallServiceTest {
 
     @Test
     fun add() {
+        WallService.erasePosts()
+        WallService.setOriginId(0)
         val startId = WallService.getOriginId()
         //проверяем начальное значение id
         assertEquals(0,startId)
@@ -40,6 +42,9 @@ class WallServiceTest {
 
     @Test
     fun update() {
+        //очищаем массив
+        WallService.erasePosts()
+        WallService.setOriginId(0)
         val  postOne = WallService.add(Post(
             1,
             1111,
@@ -114,17 +119,14 @@ class WallServiceTest {
             false,
             true,
             Donut(false,0,false,""))
-        //очищаем массив
-        WallService.erasePosts()
+
         //добавляем пост
         WallService.add(postOne)
         //пытаемся изменить пост с новым id
         val falseUpdate = WallService.update(postTwo)
-        assertFalse(falseUpdate)
+        assertTrue(falseUpdate)
         //пытаемся изменить пост с существующим id
         val trueUpdate = WallService.update(postOneUpdate)
         assertTrue(trueUpdate)
     }
-
-
 }
