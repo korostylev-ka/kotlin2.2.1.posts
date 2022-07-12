@@ -7,7 +7,7 @@ data class Post(
     val fromId: Int, //Идентификатор автора записи (от чьего имени опубликована запись).
     val createdBy: Int, //Идентификатор администратора, который опубликовал запись.
     val date: Int, //Время публикации записи
-    val text: String, //Текст записи.
+    val text: String?, //Текст записи.
     val replyOwnerId: Int, //Идентификатор владельца записи, в ответ на которую была оставлена текущая
     val replyPostId: Int, //Идентификатор записи, в ответ на которую была оставлена текущая
     val friendsOnly: Boolean, // если запись была создана с опцией «Только для друзей».
@@ -17,6 +17,8 @@ data class Post(
     var reposts: Reposts,    //Информация о репостах записи («Рассказать друзьям»), объект с полями:
     var views: Views,    //Информация о просмотрах записи. Объект с единственным полем:
     val postType: String, //Тип записи, может принимать следующие значения: post, copy, reply, postpone, suggest.
+    val postSource: PostSource, //Информация о способе размещения записи
+    val geo: Geo?, //Информация о местоположении
     val signerId: Int,   //Идентификатор автора, если запись была опубликована от имени сообщества и подписана пользователем
     val canPin: Boolean, //Информация о том, может ли текущий пользователь закрепить запись
     val canDelete: Boolean, //Информация о том, может ли текущий пользователь удалить запись
@@ -25,7 +27,6 @@ data class Post(
     val markedAsAds: Boolean, //Информация о том, содержит ли запись отметку "реклама"
     val isFavorite: Boolean, //если объект добавлен в закладки у текущего пользователя
     val donut: Donut //Информация о записи VK Donut
-
 )
 
 //Информация о комментариях к записи, объект с полями:
@@ -62,6 +63,36 @@ data class Reposts(
 //Информация о просмотрах записи. Объект с единственным полем:
 data class Views(
     val count: Int //число просмотров записи
+)
+
+data class PostSource(
+    val type: String, //Тип источника.
+    val platform: String, //Название платформы, если оно доступно.
+    val data: String, //Тип действия (только для type = vk или widget).
+    val url: String //URL ресурса, с которого была опубликована запись.
+)
+
+//Информация о местоположении
+data class Geo(
+    val type: String, // тип места
+    val coordinates: String,// координаты места
+    val place: Place // описание места (если оно добавлено).
+)
+
+// описание места (если оно добавлено).
+data class Place(
+    val id: Int, //Идентификатор места.
+    val title: String, //Название места
+    val latitude: Int, //Географическая широта, заданная в градусах (от -90 до 90)
+    val longitude: Int, //Географическая широта, заданная в градусах (от -90 до 90)
+    val created: Int, //Дата создания места в Unixtime
+    val icon: String, //Иконка места, URL изображения
+    val checkins: Int, //Число отметок в этом месте
+    val updated: Int, //Дата обновления места в Unixtime
+    val type: Int, //Тип места
+    val country: Int, //Идентификатор страны
+    val city: Int, //Идентификатор города
+    val address: String //Адрес места
 )
 
 //Информация о записи VK Donut
@@ -144,6 +175,10 @@ fun main() {
         Reposts(15, true),
         Views(1000),
         "post",
+        PostSource("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+            Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
         1111,
         true,
         true,
@@ -152,6 +187,7 @@ fun main() {
         false,
         true,
         Donut(false, 0, false, "")
+
     )
 
     var postTwo = Post(
@@ -170,6 +206,10 @@ fun main() {
         Reposts(14, true),
         Views(1200),
         "post",
+        PostSource("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+            Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
         1112,
         true,
         true,
@@ -196,6 +236,10 @@ fun main() {
         Reposts(104, true),
         Views(2300),
         "post",
+        PostSource("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+            Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
         1112,
         true,
         true,
@@ -222,6 +266,10 @@ fun main() {
         Reposts(25, true),
         Views(700),
         "post",
+        PostSource("vk", "android", "profile_activity", "netology.ru"),
+        Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+            Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
         1111,
         true,
         true,
