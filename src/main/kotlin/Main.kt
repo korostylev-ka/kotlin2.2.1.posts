@@ -1,4 +1,8 @@
+import attachments.Copys
+import attachments.Graffiti
+import attachments.Photo
 import java.util.*
+import java.util.function.BiConsumer
 
 //Дата-класс для постов
 data class Post(
@@ -26,7 +30,8 @@ data class Post(
     val isPinned: Boolean,   //Информация о том, что запись закреплена
     val markedAsAds: Boolean, //Информация о том, содержит ли запись отметку "реклама"
     val isFavorite: Boolean, //если объект добавлен в закладки у текущего пользователя
-    val donut: Donut //Информация о записи VK Donut
+    val donut: Donut, //Информация о записи VK Donut
+    val attachments: Array<Attachment> //Медиавложения записи (фотографии, ссылки и т.п.)
 )
 
 //Информация о комментариях к записи, объект с полями:
@@ -102,6 +107,11 @@ data class Donut(
     val canPublish_free_copy: Boolean,  //можно ли открыть запись для всех пользователей, а не только подписчиков VK Donut;
     val editMode: String    //информация о том, какие значения VK Donut можно изменить в записи. Возможные значения:
 )
+
+//Интерфейс, описывающий медиавложения записи (фотографии, ссылки и т.п.)
+interface Attachment{
+    val type: String
+}
 
 object WallService {
     private var posts = emptyArray<Post>()  //массив с постами
@@ -186,8 +196,8 @@ fun main() {
         false,
         false,
         true,
-        Donut(false, 0, false, "")
-
+        Donut(false, 0, false, ""),
+        arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
     )
 
     var postTwo = Post(
@@ -217,7 +227,8 @@ fun main() {
         false,
         false,
         true,
-        Donut(false, 0, false, "")
+        Donut(false, 0, false, ""),
+        arrayOf(Photo(2,2,2,2,"Photo2",1657686558, arrayOf(Copys("m","Photo2", 640,480))))
     )
 
     var postThree = Post(
@@ -247,7 +258,8 @@ fun main() {
         false,
         false,
         true,
-        Donut(false, 0, false, "")
+        Donut(false, 0, false, ""),
+        arrayOf(Photo(3,3,3,3,"Photo1",1657686558, arrayOf(Copys("m","Photo3", 640,480))))
     )
 
     var postOneUpdate = Post(
@@ -277,7 +289,8 @@ fun main() {
         false,
         false,
         true,
-        Donut(false, 0, false, "")
+        Donut(false, 0, false, ""),
+        arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
     )
     WallService.add(postOne)
     WallService.add(postTwo)

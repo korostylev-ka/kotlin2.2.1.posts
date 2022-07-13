@@ -1,3 +1,5 @@
+import attachments.Copys
+import attachments.Photo
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -38,7 +40,10 @@ class WallServiceTest {
             false,
             false,
             true,
-            Donut(false,0,false,"")))
+            Donut(false,0,false,""),
+            arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
+        ))
+
         val nextId = WallService.getOriginId()
         //проверяем id после добавления поста
         assertEquals(1,nextId)
@@ -76,7 +81,9 @@ class WallServiceTest {
             false,
             false,
             true,
-            Donut(false,0,false,"")))
+            Donut(false,0,false,""),
+            arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
+        ))
 
         val  postTwo = WallService.add(Post(
             2,
@@ -105,7 +112,9 @@ class WallServiceTest {
             false,
             false,
             true,
-            Donut(false,0,false,"")))
+            Donut(false,0,false,""),
+            arrayOf(Photo(2,2,2,2,"Photo2",1657686558, arrayOf(Copys("m","Photo1", 640,480)))))
+        )
 
         val postOneUpdate = Post(
             1,
@@ -134,7 +143,9 @@ class WallServiceTest {
             false,
             false,
             true,
-            Donut(false,0,false,""))
+            Donut(false,0,false,""),
+            arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
+        )
 
         //добавляем пост
         WallService.add(postOne)
