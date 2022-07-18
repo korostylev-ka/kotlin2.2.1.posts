@@ -2,6 +2,8 @@ import attachments.Copys
 import attachments.Graffiti
 import attachments.Photo
 import java.util.*
+import objects.Donat
+import objects.Thread
 import java.util.function.BiConsumer
 
 //Дата-класс для постов
@@ -108,6 +110,8 @@ data class Donut(
     val editMode: String    //информация о том, какие значения VK Donut можно изменить в записи. Возможные значения:
 )
 
+class PostNotFoundException(message: String): RuntimeException(message)
+
 //Интерфейс, описывающий медиавложения записи (фотографии, ссылки и т.п.)
 interface Attachment{
     val type: String
@@ -116,6 +120,7 @@ interface Attachment{
 object WallService {
     private var posts = emptyArray<Post>()  //массив с постами
     private var origId = 0 //уникальный id
+    private var comments = emptyArray<objects.Comments>() //массив с комментариями
 
     //метод очистки массива
     fun erasePosts(): Unit {
@@ -165,6 +170,26 @@ object WallService {
             }
         }
         return isUpdate
+    }
+
+    //метод добавления комментария к посту
+    fun createComment(postId: Int, comment: objects.Comments): objects.Comments {
+        var isPost = false
+        //проверяем массив постов на наличие поста с id комментария
+        for ((index, postCheck) in posts.withIndex()) {
+            //проверка на наличие поста
+            if (postCheck.id == postId) {
+                isPost = true
+            }
+        }
+        if (isPost == true) {
+            //добавляем в массив если такой id есть
+            comments += comment
+        } else {
+            //выкидываем исключение
+            throw  PostNotFoundException("Такого поста нет!")
+        }
+        return comments.last()
     }
 }
 
@@ -296,6 +321,9 @@ fun main() {
     WallService.add(postTwo)
     //проверяем, что повторно пост с имеющимся id не добавится
     WallService.add(postTwo)
+    //сзодаем объект класса комментариев к посту
+    val commentOne = objects.Comments(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null,objects.Thread(0,true,true,true))
+
 }
 
 

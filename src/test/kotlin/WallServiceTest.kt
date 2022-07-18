@@ -1,8 +1,10 @@
 import attachments.Copys
 import attachments.Photo
+import objects.Donat
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.rules.ExpectedException
 
 class WallServiceTest {
 
@@ -156,4 +158,82 @@ class WallServiceTest {
         val trueUpdate = WallService.update(postOneUpdate)
         assertTrue(trueUpdate)
     }
+
+    @Test(expected = PostNotFoundException:: class)
+    fun createComment() {
+        val commentOne = objects.Comments(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null,objects.Thread(0,true,true,true))
+        WallService.createComment(10,commentOne)
+        var postOne = Post(
+            1,
+            1111,
+            1111,
+            1111,
+            1656697687,
+            "message1",
+            1110,
+            2,
+            false,
+            Comments(25, true, true, true, true),
+            Copyright(11, "www.netology.ru", "data class", "Post"),
+            Likes(15, true, true, true),
+            Reposts(15, true),
+            Views(1000),
+            "post",
+            PostSource("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+                Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                    10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
+            1111,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
+            Donut(false, 0, false, ""),
+            arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
+        )
+        assertEquals(2,4)
+        WallService.add(postOne)
+    }
+
+    @Test
+    fun createCommentTrueId() {
+        val commentOne = objects.Comments(1,1,1657788280,"Комментарий 1", Donat(false,""),2,2,null,objects.Thread(0,true,true,true))
+        WallService.createComment(1,commentOne)
+        var postOne = Post(
+            1,
+            1111,
+            1111,
+            1111,
+            1656697687,
+            "message1",
+            1110,
+            2,
+            false,
+            Comments(25, true, true, true, true),
+            Copyright(11, "www.netology.ru", "data class", "Post"),
+            Likes(15, true, true, true),
+            Reposts(15, true),
+            Views(1000),
+            "post",
+            PostSource("vk", "android", "profile_activity", "netology.ru"),
+            Geo("Горы", "27°59′17″ с. ш. 86°55′31",
+                Place(1,"Эверест",275917,865531,1641025298,"https://manrule.ru/images/article/orig/2020/12/vse-o-voshozhdenii-na-everest-7.jpg",
+                    10,1641025298,1,977,2,"27°59′17″ с. ш. 86°55′31″")),
+            1111,
+            true,
+            true,
+            true,
+            false,
+            false,
+            true,
+            Donut(false, 0, false, ""),
+            arrayOf(Photo(1,1,1,1,"Photo1",1657686558, arrayOf(Copys("m","Photo1", 640,480))))
+        )
+        WallService.add(postOne)
+        assertEquals(commentOne,WallService.createComment(1, commentOne))
+    }
+
+
 }
